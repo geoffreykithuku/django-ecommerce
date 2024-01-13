@@ -5,3 +5,7 @@ from .models import Category, Customer, Product, Order
 def home(request):
     products = Product.objects.all()
     return render(request, 'home.html', {'products': products})
+
+def about(request):
+    products = Product.objects.all()
+    return render(request, 'about.html', {'products': products})
