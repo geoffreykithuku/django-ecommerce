@@ -11,34 +11,35 @@
   </div>
 </header>
 
-<section class="py-4">
+<section class="pt-3 pb-5">
   <div class="container px-4 px-lg-5 mt-5">
     <div class="row gx-4 gx-lg-5 align-items-center">
       <div class="col-md-6 offset-md-3 mx-auto">
-        <form class=" gap-3">
+        <form
+          method="POST"
+          action="{% url 'login' %}"
+          class="d-flex flex-column gap-4"
+        >
+          {% csrf_token %}
+
           <div class="form-group">
-           
             <input
               type="text"
               class="form-control"
-             name = "username"
+              name="username"
               placeholder="Enter Username"
             />
-            
           </div>
           <div class="form-group">
-            
             <input
               type="password"
               class="form-control"
-              name = "password"
+              name="password"
               placeholder="Enter Password"
             />
           </div>
-        
-        
-          </div>
-          <button type="submit" class="btn btn-secondary ">Login</button>
+
+          <button type="submit" class="btn btn-secondary w-25">Login</button>
         </form>
       </div>
     </div>
