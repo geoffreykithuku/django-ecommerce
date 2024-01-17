@@ -45,13 +45,17 @@
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            >Shop</a
+            >Categories</a
           >
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#!">All Products</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}">All Products</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-            <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+          
+            <li><a class="dropdown-item" href="{% url 'category' 'Hats-and-Caps' %}">Hats and Caps</a></li>
+            <li><a class="dropdown-item" href="{% url 'category' 'Shoes' %}">Shoes</a></li>
+            <li><a class="dropdown-item" href="{% url 'category' 'Belts' %}">Belts</a></li>
+            <li><a class="dropdown-item" href="{% url 'category' 'Colognes' %}">Colognes</a></li>
+            <li><a class="dropdown-item" href="{% url 'category' 'Watches' %}">Watches</a></li>
           </ul>
         </li>
       </ul>
