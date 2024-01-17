@@ -61,3 +61,14 @@ def register_user(request):
 def product(request, id):
     product = Product.objects.get(id=id)
     return render(request, 'product.html', {'product': product})
+
+def category(request, slug):
+    slug = slug.replace('-', ' ')
+    try:
+        category = Category.objects.get(name=slug)
+        products = Product.objects.filter(category=category)
+        return render(request, 'category.html', {'products': products, 'category': category})
+
+    except:
+        messages.error(request, "That category does not exist.")
+        return redirect('home')
