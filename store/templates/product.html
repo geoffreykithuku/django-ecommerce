@@ -57,7 +57,7 @@
 </div>
 
 <script>
-  $(document).on('click', '#add-cart', (e)=>{
+  $(document).on('click', '#add-cart', function(e){
     e.preventDefault() 
     $.ajax({
       type: 'POST',
@@ -67,11 +67,11 @@
         csrfmiddlewaretoken: '{{ csrf_token }}',
         action: 'post'
       },
-      success: (json)=>{
+      success: function(json){
         document.getElementById('cart_quantity').textContent = json.qty
       },
 
-      error: (xhr, errmsg, err)=>{
+      error: function(xhr, errmsg, err){
         console.log(xhr.status + ":" + xhr.responseText)
 
       }

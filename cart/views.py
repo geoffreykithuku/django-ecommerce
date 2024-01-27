@@ -8,15 +8,22 @@ def cart_summary(request):
     return render(request, 'cart_summary.html', {})
 
 def cart_add(request):
+    #get cart
     cart = Cart(request)
+
+    #test the POST
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('product_id'))
+        
+        #look up for the product
         product = get_object_or_404(Product, id=product_id)
+
+        #add to cart
         cart.add(product=product)
 
         #get cart qtty
         cart_quantity = cart.__len__()
-        #response = JsonResponse({'Product Name:' : product.name})
+        # response = JsonResponse({'Product Name:' : product.name})
 
         response = JsonResponse({'qty': cart_quantity})
         return response
