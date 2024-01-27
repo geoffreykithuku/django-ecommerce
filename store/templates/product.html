@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container p-5 ">
+<div class="container p-5">
   <div class="card mb-3" style="max-width: 540px">
     <div class="row g-0">
       <div class="col-md-4">
@@ -11,38 +11,73 @@
         />
       </div>
       <div class="col-md-8">
-       <center>
-         <div class="card-body">
-          <h5 class="card-title">{{product.name}}</h5>
-          <p class="card-text">{{product.description}}</p>
-          {% if product.on_offer %}
-          <div class="card-body p-4">
-            <div class="text-center">
-              <!-- Product name-->
-              <h5 class="fw-bolder">{{product.name}}</h5>
+        <center>
+          <div class="card-body">
+            <h5 class="card-title">{{product.name}}</h5>
+            <p class="card-text">{{product.description}}</p>
+            {% if product.on_offer %}
+            <div class="card-body p-4">
+              <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder">{{product.name}}</h5>
 
-              <div
-                class="d-flex justify-content-center small text-warning mb-2"
-              >
-                <div class="bi-star-fill"></div>
-                <div class="bi-star-fill"></div>
-                <div class="bi-star-fill"></div>
-                <div class="bi-star-fill"></div>
-                <div class="bi-star-fill"></div>
+                <div
+                  class="d-flex justify-content-center small text-warning mb-2"
+                >
+                  <div class="bi-star-fill"></div>
+                  <div class="bi-star-fill"></div>
+                  <div class="bi-star-fill"></div>
+                  <div class="bi-star-fill"></div>
+                  <div class="bi-star-fill"></div>
+                </div>
+                <!-- Product price-->
+                <strike> KES {{product.price}} </strike>
+                &nbsp; {{product.offer_price}} {% else %} KES {{product.price}}
+                {%endif%}
               </div>
-              <!-- Product price-->
-              <strike> KES {{product.price}} </strike>
-              &nbsp; {{product.offer_price}} {% else %} KES {{product.price}}
-              {%endif%}
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center gap-5 mb-2">
+              <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+
+            <button
+              type="button"
+              value="{{product.id}}"
+              id="add-cart"
+              class="btn btn-secondary"
+            >
+              Add To Cart
+            </button>
             </div>
           </div>
-
-          <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
-        </div>
-       </center>
+        </center>
       </div>
     </div>
   </div>
 </div>
 
+<script>
+  $(document).on('click', '#add-cart', (e)=>{
+    e.preventDefault() 
+    $.ajax({
+      type: 'POST',
+      url: '{% url "cart_add" %}',
+      data:{
+        product_id: $('#add-cart').val(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      },
+      success: (json)=>{
+        alert(json['success'])
+      },
+
+      error: (xhr, errmsg, err)=>{
+        console.log(xhr.status + ":" + xhr.responseText)
+
+      }
+
+    })
+
+  })
+</script>
 {% endblock %}
