@@ -68,7 +68,7 @@
         action: 'post'
       },
       success: (json)=>{
-        alert(json['success'])
+        document.getElementById('cart_quantity').textContent = json.qty
       },
 
       error: (xhr, errmsg, err)=>{
