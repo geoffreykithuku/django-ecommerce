@@ -10,13 +10,15 @@ class Cart():
             cart = self.session['session_key'] = {}
         self.cart = cart
 
-    def add(self, product):
+    def add(self, product, qty):
         product_id = str(product.id)
+        product_qty = qty
 
         if product_id in self.cart:
             pass 
         else:
-            self.cart[product_id] = {'price': str(product.price)}
+            # self.cart[product_id] = {'price': str(product.price)}
+            self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
 
@@ -32,3 +34,7 @@ class Cart():
         # use ids to lookup products from the database
         products = Product.objects.filter(id__in=product_ids)
         return products
+    
+    def get_quantities(self):
+        quantities = self.cart
+        return quantities   

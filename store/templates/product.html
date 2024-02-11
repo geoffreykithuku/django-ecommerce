@@ -5,79 +5,85 @@
     <div class="row g-0">
       <div class="col-md-4">
         <img
-          src="{{product.image.url}}"
+          src="{{ product.image.url }}"
           class="img-fluid rounded-start w-100"
-          alt="..."
+          alt="Product Image"
         />
       </div>
       <div class="col-md-8">
-        <center>
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          {% if product.on_offer %}
           <div class="card-body">
-            <h5 class="card-title">{{product.name}}</h5>
-            <p class="card-text">{{product.description}}</p>
-            {% if product.on_offer %}
-            <div class="card-body p-4">
-              <div class="text-center">
-                <!-- Product name-->
-                <h5 class="fw-bolder">{{product.name}}</h5>
-
-                <div
-                  class="d-flex justify-content-center small text-warning mb-2"
-                >
-                  <div class="bi-star-fill"></div>
-                  <div class="bi-star-fill"></div>
-                  <div class="bi-star-fill"></div>
-                  <div class="bi-star-fill"></div>
-                  <div class="bi-star-fill"></div>
-                </div>
-                <!-- Product price-->
-                <strike> KES {{product.price}} </strike>
-                &nbsp; {{product.offer_price}} {% else %} KES {{product.price}}
-                {%endif%}
+            <div class="">
+              <h5 class="fw-bolder">{{ product.name }}</h5>
+              <div class="d-flex small text-warning mb-2">
+                <div class="bi-star-fill"></div>
+                <div class="bi-star-fill"></div>
+                <div class="bi-star-fill"></div>
+                <div class="bi-star-fill"></div>
+                <div class="bi-star-fill"></div>
               </div>
+              <strike>KES {{ product.price }}</strike>
+              &nbsp;{{ product.offer_price }}
             </div>
-
-            <div class="d-flex justify-content-center align-items-center gap-5 mb-2">
-              <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
-
+          </div>
+          {% else %}
+          <div class="">
+            <p>KES {{ product.price }}</p>
+          </div>
+          {% endif %}
+          <br />
+          <div class="row">
+            <div class="col-md-4">Quantity:</div>
+            <div class="col-md-2">
+              <select class="form-select" id="quantity_cart">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+          <div class="d-flex gap-5 mt-3">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
             <button
               type="button"
-              value="{{product.id}}"
+              value="{{ product.id }}"
               id="add-cart"
               class="btn btn-secondary"
             >
               Add To Cart
             </button>
-            </div>
           </div>
-        </center>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  $(document).on('click', '#add-cart', function(e){
-    e.preventDefault() 
+  $(document).on("click", "#add-cart", function (e) {
+    e.preventDefault();
     $.ajax({
-      type: 'POST',
+      type: "POST",
       url: '{% url "cart_add" %}',
-      data:{
-        product_id: $('#add-cart').val(),
-        csrfmiddlewaretoken: '{{ csrf_token }}',
-        action: 'post'
+      data: {
+        product_id: $("#add-cart").val(),
+        product_qty: $("#quantity_cart option:selected").text(),
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        action: "post",
       },
-      success: function(json){
-        document.getElementById('cart_quantity').textContent = json.qty
+      success: function (json) {
+        document.getElementById("cart_quantity").textContent = json.qty;
       },
-
-      error: function(xhr, errmsg, err){
-        console.log(xhr.status + ":" + xhr.responseText)
-
-      }
-
-    })
-
-  })
+      error: function (xhr, errmsg, err) {
+        console.log(xhr.status + ":" + xhr.responseText);
+      },
+    });
+  });
 </script>
+
 {% endblock %}
