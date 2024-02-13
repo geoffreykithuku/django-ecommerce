@@ -64,3 +64,15 @@ class Cart():
         else:
             pass
         return self.cart
+    
+    def cart_total(self):
+        cart = self.cart
+        total = 0
+        for item in cart:
+            product = Product.objects.get(id=item)
+            if product.on_offer:
+                total += (product.offer_price * cart[item])
+            else:
+                total += (product.price * cart[item])
+
+        return total
