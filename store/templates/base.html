@@ -30,14 +30,7 @@
     ></script>
   </head>
   <body>
-    {% include 'navbar.html' %} {% if messages%} {% for message in messages %}
-
-    <div class="alert alert-success alert-dismissible">
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      {{message}}
-    </div>
-
-    {%endfor %} {% endif %} {% block content %} {% endblock %} 
+    {% include 'navbar.html' %} {% block content %} {% endblock %} 
     {% include 'footer.html' %}
 
     <!-- Bootstrap core JS-->
