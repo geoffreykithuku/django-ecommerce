@@ -77,3 +77,7 @@ def category(request, slug):
 def category_summary(request):
     categories = Category.objects.all()
     return render(request, 'category_summary.html', {'categories': categories}) 
+
+
+def update_user(request):
+    return render(request, 'update_user.html')
