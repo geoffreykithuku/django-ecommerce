@@ -82,15 +82,15 @@ def category_summary(request):
 def update_user(request):
     if request.user.is_authenticated:
         current_user = User.objects.get(id=request.user.id)
-        form = UpdateUserForm(request.POST or None, instance=current_user)
+        user_form = UpdateUserForm(request.POST or None, instance=current_user)
 
-        if form.is_valid():
-            form.save()
+        if user_form.is_valid():
+            user_form.save()
 
             login(request, current_user)
             messages.success(request, "User has been updated successfuly")
             return redirect('home')
-        return render(request, 'update_user.html', {'form': form})
+        return render(request, 'update_user.html', {'user_form': user_form})
     else:
         messages.error(request, "You need to be logged in to update your profile")
         return redirect('login')
