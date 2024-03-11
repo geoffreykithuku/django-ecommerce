@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
+
 # Create your views here.
 
 def home(request):
@@ -102,7 +103,19 @@ def update_password(request):
 
         # check if user filled the form
         if request.method == 'POST':
-            pass
+            form = ChangePasswordForm(current_user, request.POST)
+
+            # check if form is valid
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Password has been updated successfuly.")
+                login(request, current_user)
+                return redirect('update_user')
+              
+            else:
+                for error in form.errors.values():
+                    messages.error(request, error)
+                return redirect('update_password')
         else:
             form = ChangePasswordForm(current_user)
             return render(request, 'update_password.html', {
