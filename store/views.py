@@ -130,3 +130,6 @@ def update_password(request):
 
 
     
+
+def update_info(request):
+    pass
