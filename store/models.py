@@ -1,5 +1,8 @@
 from django.db import models
 import datetime
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
 # Create your models here.
 
 class Category(models.Model):
@@ -47,3 +50,16 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.customer.first_name} {self.customer.last_name}"
+    
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_modified = models.DateTimeField(auto_now=True)
+    phone = models.CharField(max_length=50, default='', blank=True)
+    address = models.CharField(max_length=50, default='', blank=True)
+    city = models.CharField(max_length=50, default='', blank=True)
+    county = models.CharField(max_length=50, default='', blank=True)
+    country = models.CharField(max_length=50, default='', blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} Profile"
