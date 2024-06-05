@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Category, Customer, Product, Order
+from .models import Category, Customer, Product, Order, Profile
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserProfileUpdateForm
 
 
 # Create your views here.
@@ -132,4 +132,29 @@ def update_password(request):
     
 
 def update_info(request):
-    pass
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user__id=request.user.id)
+
+        # check if user filled the form
+        if request.method == 'POST':
+            form = UserProfileUpdateForm(request.POST or None, instance=current_user)
+
+            # check if form is valid
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile has been updated successfuly.")
+                login(request, current_user.user)
+                return redirect('home')
+              
+            else:
+                for error in form.errors.values():
+                    messages.error(request, error)
+                return redirect('update_password')
+        else:
+            form = UserProfileUpdateForm(instance=current_user)
+            return render(request, 'user_info.html', {
+                'form': form
+            })
+    else:
+        messages.error(request, "You need to be logged in to update your profile")
+        return redirect('login')
