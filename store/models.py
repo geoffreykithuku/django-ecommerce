@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 
+
 class Category(models.Model):
     class Meta:
         verbose_name_plural = 'categories'
@@ -63,3 +64,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} Profile"
+    
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+
+post_save.connect(create_profile, sender=User)
