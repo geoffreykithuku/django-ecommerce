@@ -1,0 +1,89 @@
+{% extends 'base.html' %} {% block content %}
+
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Search</h1>
+      <p class="lead fw-normal text-white-50 mb-0">
+        Find the products you are looking for.
+      </p>
+    </div>
+  </div>
+</header>
+
+{% if messages %}
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <br />
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="container">
+  <div class="row">
+    <center>
+      <div class="col-8">
+        <br /><br />
+        <div class="card">
+          <div class="card-header">Search</div>
+          <form class="px-4" method="POST" action="{% url 'search' %}">
+            {% csrf_token %}
+            <div class="m-3">
+              <input
+                type="text"
+                class="form-control"
+                id="search"
+                name="search"
+                placeholder="Search for products..."
+              />
+              <br />
+              <button type="submit" class="btn btn-secondary w-100">
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+        <br /><br />
+       
+      </div>
+    </center>
+
+    
+  </div>
+  <div class="row m-2">
+     {% if search %}
+        <p>
+          <strong>Results for "{{ search }}"</strong>
+        </p>
+        <br />
+        {% for product in products %}
+        <div class="card col-3 ">
+          <div class="card-header">
+            <a href="{% url 'product' product.id %}">{{ product.name }}</a>
+          </div>
+            <div class="card-body">
+                <img
+                    src="{{ product.image.url }}"
+                    class="img-fluid"
+                    alt="{{ product.name }}"
+                />
+                <br />
+                
+                <p>Price: Ksh {{ product.price }}</p>
+                <p>Category: {{ product.category }}</p>
+        </div>
+        {% endfor %} {% endif %}
+        <br /><br />
+  </div>
+</div>
+<br>
+<br>
+
+{% endblock %}

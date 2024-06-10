@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserProfileUpdateForm
+from django.db.models import Q
 
 
 # Create your views here.
@@ -51,8 +52,8 @@ def register_user(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, "You have signed up successfully")
-                return redirect('home')
+                messages.success(request, "Account created. Please fill in profile details")
+                return redirect('update_info')
         else:
             messages.error(request,"An error occurred. Please try again.")
             return redirect('register')
@@ -158,3 +159,18 @@ def update_info(request):
     else:
         messages.error(request, "You need to be logged in to update your profile")
         return redirect('login')
+    
+
+def search(request):
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        products = Product.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        if not products:
+            messages.error(request, "No products found")
+            return render(request, 'search.html', {})
+        else:
+            return render(request, 'search.html', {'products': products, 'search': search})
+        
+   
+       
+    return render(request, 'search.html', {})
