@@ -27,6 +27,13 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
+
+            #get user profile
+            current_user = Profile.objects.get(user__id=request.user.id)
+
+            # get saved cart from session
+            
+
             messages.success(request, "Successfully logged in")
             return redirect('home')
         else:
