@@ -8,6 +8,9 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserProfileUpdateForm
 from django.db.models import Q
 
+import json
+
+from cart.cart import Cart
 
 # Create your views here.
 
@@ -32,7 +35,18 @@ def login_user(request):
             current_user = Profile.objects.get(user__id=request.user.id)
 
             # get saved cart from session
-            
+            saved_cart = current_user.old_cart
+            if saved_cart:
+                # convert to dict using JSON
+                converted_cart = json.loads(saved_cart)
+
+                # add the loaded cart to session
+                cart = Cart(request)
+
+                # loop through the cart and add items from the db
+                for key,value in converted_cart.items():
+                    cart.db_add(product=key, qty=value)
+
 
             messages.success(request, "Successfully logged in")
             return redirect('home')
